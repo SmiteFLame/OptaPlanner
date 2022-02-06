@@ -16,6 +16,8 @@ repositories {
 }
 
 dependencies {
+	compileOnly("org.optaplanner:optaplanner-spring-boot-starter:8.12.0.Final")
+
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
