@@ -5,12 +5,14 @@ import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty
 import org.optaplanner.core.api.domain.solution.PlanningScore
 import org.optaplanner.core.api.domain.solution.PlanningSolution
 import org.optaplanner.core.api.domain.solution.ProblemFactCollectionProperty
+import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore
 
 @PlanningSolution
 data class TSPProblem(
     @ProblemFactCollectionProperty val fact: List<Int>,
-    @PlanningEntityCollectionProperty val entity: List<Lesson>
+    @ValueRangeProvider(id = "test") val test: List<Test>,
+    @PlanningEntityCollectionProperty val entity: List<Road>
 ) : PlanningProblem {
 
     @PlanningScore
