@@ -8,9 +8,9 @@ import org.optaplanner.core.api.domain.solution.ProblemFactCollectionProperty
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore
 
 @PlanningSolution
-class TSPProblem(
+data class TSPProblem(
     @ProblemFactCollectionProperty val fact: List<Int>,
-    @PlanningEntityCollectionProperty val entity: List<Int>
+    @PlanningEntityCollectionProperty val entity: List<Lesson>
 ) : PlanningProblem {
 
     @PlanningScore

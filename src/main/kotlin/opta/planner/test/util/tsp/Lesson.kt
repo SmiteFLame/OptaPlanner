@@ -1,7 +1,11 @@
 package opta.planner.test.util.tsp
 
 import org.optaplanner.core.api.domain.entity.PlanningEntity
+import org.optaplanner.core.api.domain.lookup.PlanningId
+import org.optaplanner.core.api.domain.variable.PlanningVariable
 
 @PlanningEntity
-class Lesson {
-}
+data class Lesson(
+    @PlanningId val id: Long,
+    @PlanningVariable(valueRangeProviderRefs = ["test"]) val test: Test
+)
