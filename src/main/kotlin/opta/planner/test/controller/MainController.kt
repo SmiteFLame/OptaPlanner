@@ -13,8 +13,9 @@ class MainController(
 
     @PostMapping("/tsp/solve")
     fun solve(@RequestBody problem: TSPProblem): TSPProblem {
-        println("Project is Working")
+        println("Start")
         val solverJob = planningProblem.solve(problem)
+        println("end")
         return planningProblem.getFinalBestSolution(solverJob)
     }
 

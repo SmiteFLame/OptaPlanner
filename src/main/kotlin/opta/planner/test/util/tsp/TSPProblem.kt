@@ -10,18 +10,24 @@ import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore
 
 @PlanningSolution
-class TSPProblem(
+class TSPProblem : PlanningProblem {
+
     // 문제 해결중에 변경이 되지 않는 것
     @ValueRangeProvider(id = "center")
     @ProblemFactCollectionProperty
-    val centerList :  List<Center>,
+    lateinit var centerList :  List<Center>
 
     // 문제 해결중에 변경이 되는 것
     @PlanningEntityCollectionProperty
-    val roadList: List<Road>
-) : PlanningProblem {
+    lateinit var roadList: List<Road>
+
+    constructor()
+
+    constructor(centerList: List<Center>, roadList: List<Road>){
+        this.centerList = centerList
+        this.roadList = roadList
+    }
 
     @PlanningScore
-    @JsonProperty(required = false)
     lateinit var score: HardSoftScore
 }
