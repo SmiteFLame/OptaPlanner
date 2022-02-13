@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class MainController {
-
-    lateinit var planningProblem: PlanningProblemImpl<TSPProblem>
+class MainController(
+    val planningProblem: PlanningProblemImpl<TSPProblem>
+) {
 
     @PostMapping("/tsp/solve")
     fun solve(@RequestBody problem: TSPProblem): TSPProblem {
