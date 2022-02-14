@@ -1,34 +1,53 @@
 package opta.planner.test.util.tsp
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import opta.planner.test.planning.PlanningProblem
 import org.optaplanner.core.api.domain.solution.*
 import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider
-import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore
+import org.optaplanner.core.api.score.buildin.hardsoftlong.HardSoftLongScore
 
 @PlanningSolution
 class TSPProblem : PlanningProblem {
 
     @ProblemFactProperty
-    lateinit var startCenter: Center
+    var startCenter: Center
 
     // 문제 해결중에 변경이 되지 않는 것
-    @ValueRangeProvider(id = "center")
     @ProblemFactCollectionProperty
-    lateinit var centerList :  List<Center>
+    @ValueRangeProvider(id = "centerList")
+    var centerList: List<Center>
 
     // 문제 해결중에 변경이 되는 것
+    @ProblemFactCollectionProperty
+    var roadList: List<Road>
+
     @PlanningEntityCollectionProperty
-    lateinit var roadList: List<Road>
+    var answerList: ArrayList<CenterTo>
 
-    constructor()
+    @PlanningScore
+    lateinit var score: HardSoftLongScore
 
-    constructor(startCenter: Center, centerList: List<Center>, roadList: List<Road>){
+    constructor() {
+        this.startCenter = Center(0)
+        this.centerList = ArrayList()
+        this.roadList = ArrayList()
+        this.answerList = ArrayList()
+        setAnswerList()
+    }
+
+    constructor(startCenter: Center, centerList: List<Center>, roadList: List<Road>) {
         this.startCenter = startCenter
         this.centerList = centerList
         this.roadList = roadList
+        this.answerList = ArrayList()
+        setAnswerList()
     }
 
-    @PlanningScore
-    lateinit var score: HardSoftScore
+    fun setAnswerList() {
+        this.answerList = ArrayList()
+
+        for (i in centerList.indices) {
+            answerList.add(CenterTo(centerList[i].centerId))
+        }
+    }
+
 }

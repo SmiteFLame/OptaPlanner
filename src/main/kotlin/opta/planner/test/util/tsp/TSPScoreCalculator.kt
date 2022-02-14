@@ -1,45 +1,56 @@
 package opta.planner.test.util.tsp
 
-import org.optaplanner.core.api.score.buildin.hardsoftbigdecimal.HardSoftBigDecimalScore
+import org.optaplanner.core.api.score.buildin.hardsoftlong.HardSoftLongScore
 import org.optaplanner.core.api.score.calculator.EasyScoreCalculator
-import java.math.BigDecimal
 
-class TSPScoreCalculator : EasyScoreCalculator<TSPProblem, HardSoftBigDecimalScore> {
-    override fun calculateScore(solution: TSPProblem?): HardSoftBigDecimalScore {
+class TSPScoreCalculator : EasyScoreCalculator<TSPProblem, HardSoftLongScore> {
+
+    override fun calculateScore(solution: TSPProblem?): HardSoftLongScore {
         if (solution == null) {
             throw Exception("ERROR")
         }
+
+        // 1. 사이클을 만들 수 있는 지 확인
         val size = solution.centerList.size
-        val dp = Array(size) { Array((1 shl size) - 1) { Int.MAX_VALUE } }
-
-        val roadArray = Array(size) { Array(size) { Int.MAX_VALUE } }
-
-        solution.roadList.forEach{ road ->
-            roadArray[road.from.centerId][road.to.centerId] = road.weight
-        }
-
         val start = solution.startCenter.centerId
 
-        fun dfs(now: Int, visit: Int): Int {
-            if (visit == (1 shl size) - 1) {
-                return roadArray[now][start]
+        val visited = Array(size) { false }
+        var now = start
+        for (i in 0 until size) {
+            if (visited[now]) {
+                return HardSoftLongScore.ofHard(Long.MIN_VALUE)
             }
-
-            if(dp[now][visit] != Int.MAX_VALUE){
-                return dp[now][visit]
-            }
-
-            for (i in 0 until size) {
-                if ((visit and (1 shl i)) == 0 && roadArray[now][i] != 0) {
-                    dp[now][visit] = dp[now][visit].coerceAtMost(dfs(i, (visit or (1 shl i))) + roadArray[now][i])
-                }
-            }
-            return dp[now][visit]
+            visited[now] = true
+            now = solution.answerList[now].to.centerId
         }
 
-        dfs(start, 1)
+        if(now != start){
+            return HardSoftLongScore.ofHard(Long.MIN_VALUE)
+        }
 
+        // 2.각각이 길이 있는 지 확인
+        val map = HashMap<Center, HashMap<Center, Road>>()
+        solution.roadList.forEach { road ->
+            map.putIfAbsent(road.from, HashMap())
+            if(map[road.from]!!.containsKey(road.to)){
+                if(road.weight < map[road.from]!![road.to]!!.weight){
+                    map[road.from]!![road.to] = road
+                }
+            } else{
+                map[road.from]!![road.to] = road
+            }
+        }
+        var answer = 0L
 
-        return return HardSoftBigDecimalScore.ofHard(BigDecimal.valueOf(Long.MIN_VALUE))
+        solution.answerList.forEach { centerTo ->
+            if(!map.containsKey(centerTo.from) || !map[centerTo.from]!!.containsKey(centerTo.to)){
+                return HardSoftLongScore.ofHard(Long.MIN_VALUE)
+            }
+            answer += map[centerTo.from]!![centerTo.to]!!.weight
+        }
+
+        println(answer)
+
+        return HardSoftLongScore.of(0L, -answer)
     }
 }

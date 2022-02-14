@@ -2,6 +2,7 @@ package opta.planner.test.configuration
 
 import opta.planner.test.planning.PlanningProblemFactory
 import opta.planner.test.planning.PlanningProblemImpl
+import opta.planner.test.util.tsp.CenterTo
 import opta.planner.test.util.tsp.Road
 import opta.planner.test.util.tsp.TSPProblem
 import opta.planner.test.util.tsp.TSPScoreCalculator
@@ -22,7 +23,7 @@ class ManagerConfig {
     fun tspProblemManager(): PlanningProblemImpl<TSPProblem>{
         val solverConfig = SolverConfig()
             .withSolutionClass(TSPProblem::class.java)
-            .withEntityClasses(Road::class.java)
+            .withEntityClasses(CenterTo::class.java)
             .withScoreDirectorFactory(ScoreDirectorFactoryConfig()
                 .withEasyScoreCalculatorClass(TSPScoreCalculator::class.java))
             .withTerminationConfig(TerminationConfig().withSecondsSpentLimit(5L))
