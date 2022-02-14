@@ -16,10 +16,12 @@ class TSPProblem : PlanningProblem {
     @ValueRangeProvider(id = "centerList")
     var centerList: List<Center>
 
-    // 문제 해결중에 변경이 되는 것
+    // 문제 해결중에 변경이 되지 않는 것
     @ProblemFactCollectionProperty
+    @ValueRangeProvider(id = " roadList")
     var roadList: List<Road>
 
+    // 문제 해결중에 변경이 되는 것
     @PlanningEntityCollectionProperty
     var answerList: ArrayList<CenterTo>
 
